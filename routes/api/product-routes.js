@@ -1,30 +1,47 @@
 const router = require('express').Router();
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
-// The `/api/products` endpoint
-
-// get all products
-router.get('/', (req, res) => {
-  // find all products
-  // be sure to include its associated Category and Tag data
-});
-
-// get one product
-router.get('/:id', (req, res) => {
-  // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
-});
-
-// create new product
-router.post('/', (req, res) => {
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
+router.get('/', async (req, res) => {
+    try {
+        const product = await Product.findAll({
+            include: [{ Category }, { Tag }],
+        });
+        res.status(200).json(product);
+    } catch (err) {
+        res.status(500).json({ message: 'Error occurred' });
     }
-  */
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const product = await Product.findAll({
+            include: [ { Category }, { Tag } ],
+        });
+        res.status(200).json(product);
+    }   catch (err) {
+        res.status(500).json( { message: 'Error Occurred' });
+    }
+});
+
+router.post('/', (req, res) => {
+    Product.create(req.body)
+    .then((product) => {
+        if (req.body.tagIds.length) {
+            const productTagIds = req.body.tagIds.map((tag_id) => {
+                return {
+                    product_id: product.id,
+                    tag_id,
+                };
+            });
+            return ProductTag.bulkCreate(productTagIds);
+        }
+        res.status(200).json(product);
+    })
+    .then((productTagIds) => res.status(200).json(productTagIds))
+    .catch((err) => {
+        res.status(400).json({ message: 'Error occurred', error: err });
+    });
+    
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
