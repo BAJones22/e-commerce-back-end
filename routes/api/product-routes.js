@@ -3,8 +3,8 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.findAll({ include: [Product] });
-    res.status(200).json(tags);
+    const products = await Product.findAll({ include: [Tag, Category] });
+    res.status(200).json(products);
   } catch (err) {
     res.status(500).json({ message: 'Error occurred' });
   }
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const products = await Product.findByPk(req.params.id, { include: [Product] });
+    const products = await Product.findByPk(req.params.id, { include: [Tag, Category] });
     if (!products) {
       res.status(404).json({ message: 'Error occurred' });
       return;
@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const products = await Product.findByPk(req.params.id, { include: [Product] });
+    const products = await Product.findByPk(req.params.id, { include: [Tag, Category] });
     if (!products) {
       res.status(404).json({ message: 'Error occurred' });
       return;
