@@ -17,8 +17,8 @@ The goal of this project was to build the back end for an e-commerce site.
 
 4. Open the .env file and add the following lines, replacing DB_NAME, DB_USER, and DB_PASSWORD with your MySQL database details:
 
-`DB_NAME=your_database_name`
-`DB_USER=your_mysql_username`
+`DB_NAME=your_database_name` <br>
+`DB_USER=your_mysql_username` <br>
 `DB_PASSWORD=your_mysql_password`
 
 5. Open a terminal and navigate to the project root directory.
